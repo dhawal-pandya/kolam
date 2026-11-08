@@ -19,6 +19,10 @@ The construction rules, the conventions chosen where sources disagree, and
 the proofs behind which symmetries are offered are in
 [docs/CONSTRUCTION.md](docs/CONSTRUCTION.md).
 
+I tried to build something like this with my friend
+[Viral](https://github.com/viralparmarme) a few years back, he is the one who brought me to coding, but at that time we could never make it
+work then, so I made a revised version.
+
 ## Running
 
 ```sh
