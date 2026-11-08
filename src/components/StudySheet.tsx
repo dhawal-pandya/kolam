@@ -9,6 +9,7 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { generateKolam, KolamConfig, toQueryString } from '@/engine';
 import { renderSvg } from '@/render/organic';
+import Footer from './Footer';
 
 const SPECS: (Partial<KolamConfig> & { label: string })[] = [
   { label: 'Simple bilateral sikku', family: 'sikku', symmetry: 'bilateral-v', arrangement: 'square', complexity: 2 },
@@ -97,6 +98,7 @@ export default function StudySheet() {
           ))}
         </ul>
       )}
+      <Footer />
     </main>
   );
 }

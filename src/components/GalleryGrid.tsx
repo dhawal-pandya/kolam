@@ -6,6 +6,7 @@ import { generateKolam } from '@/engine';
 import { renderSvg } from '@/render/organic';
 import { GALLERY, entryHref } from '@/data/gallery';
 import Floor from './Floor';
+import Footer from './Footer';
 
 /** Curated designs, each regenerated in the browser from its stored configuration. */
 export default function GalleryGrid() {
@@ -72,6 +73,7 @@ export default function GalleryGrid() {
       </ul>
       </section>
         ))}
+      <Footer />
     </main>
   );
 }

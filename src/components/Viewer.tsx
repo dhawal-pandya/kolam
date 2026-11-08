@@ -15,6 +15,7 @@ import {
 import { renderSvg } from '@/render/organic';
 import { featuredConfig } from '@/data/gallery';
 import Floor from './Floor';
+import Footer from './Footer';
 import KolamCanvas, { CanvasHandle } from './KolamCanvas';
 import SettingsModal from './SettingsModal';
 import { IconFit, IconMinus, IconPlus, IconSettings } from './icons';
@@ -43,6 +44,41 @@ function describe(c: KolamConfig): string {
   return `${FAMILY_LABEL[c.family]} · ${ARRANGEMENT_LABEL[c.arrangement].split(' (')[0].toLowerCase()} ${grid} · ${sym.toLowerCase()}`;
 }
 
+/**
+ * Gallery mode: after `ms` without mouse, touch, wheel or key activity, only
+ * the kolam stays on screen. Never idles while `paused` (settings open) or
+ * while the pointer rests on one of the controls.
+ */
+function useIdle(ms: number, paused: boolean): boolean {
+  const [idle, setIdle] = useState(false);
+  useEffect(() => {
+    if (paused) {
+      setIdle(false);
+      return;
+    }
+    let timer: number | undefined;
+    const arm = () => {
+      window.clearTimeout(timer);
+      timer = window.setTimeout(() => {
+        if (document.querySelector('.controls:hover, .identity:hover, .top:hover, .credit:hover')) arm();
+        else setIdle(true);
+      }, ms);
+    };
+    const wake = () => {
+      setIdle(false);
+      arm();
+    };
+    const events = ['mousemove', 'pointerdown', 'wheel', 'keydown', 'touchstart'] as const;
+    events.forEach((e) => window.addEventListener(e, wake, { passive: true }));
+    arm();
+    return () => {
+      window.clearTimeout(timer);
+      events.forEach((e) => window.removeEventListener(e, wake));
+    };
+  }, [ms, paused]);
+  return idle;
+}
+
 export default function Viewer() {
   const [config, setConfig] = useState<KolamConfig | null>(null);
   const [urlError, setUrlError] = useState<string | null>(null);
@@ -50,6 +86,7 @@ export default function Viewer() {
   const [zoom, setZoom] = useState(1);
   const [copied, setCopied] = useState(false);
   const canvas = useRef<CanvasHandle>(null);
+  const idle = useIdle(3000, settingsOpen);
 
   // Load from URL (direct navigation, refresh, shared link, back/forward).
   useEffect(() => {
@@ -128,7 +165,7 @@ export default function Viewer() {
   const maxZoom = design ? Math.max(3, Math.min(14, Math.sqrt(design.stats.dots) * 0.9)) : 4;
 
   return (
-    <main className="viewer">
+    <main className={idle ? 'viewer idle' : 'viewer'}>
       <Floor />
       {result?.svg && <KolamCanvas key={design!.fullId} ref={canvas} svg={result.svg} maxZoom={maxZoom} onZoomChange={setZoom} />}
       {(result?.error || urlError) && (
@@ -139,6 +176,8 @@ export default function Viewer() {
           </button>
         </div>
       )}
+
+      <Footer variant="overlay" />
 
       <nav className="top">
         <Link href="/gallery/" className="quiet-link">
