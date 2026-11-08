@@ -1,4 +1,4 @@
 :HL["/kolam/_next/static/chunks/37s_5oq6f7e9h.css","style"]
 2:[["children",{"s":"__PAGE__","h":160}]]
 1:[["children",{"s":"gallery","h":96,"c":"$Q2"}]]
-0:{"b":"r5WZy62anzwOK_7zeCa9h","t":{"t":{"s":"","h":80,"c":"$Q1"}}}
+0:{"b":"1rC-THI1q5wH95sQf25Ek","t":{"t":{"s":"","h":80,"c":"$Q1"}}}
