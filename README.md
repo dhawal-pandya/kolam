@@ -1,5 +1,9 @@
 # Kolam
 
+[![A single-line sikku kolam of 225 dots in rice flour](public/og-kolam.jpg)](https://dhawal-pandya.github.io/kolam/)
+
+**Live:** https://dhawal-pandya.github.io/kolam/
+
 A deterministic generative studio for Indian kolam, the rice-flour
 threshold art. Every design is *constructed* from the rules of its tradition
 (dot lattices, mirror curves, symmetry orbits), rendered as SVG, and

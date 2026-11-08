@@ -4,3 +4,5 @@ out
 next-env.d.ts
 *.tsbuildinfo
 /visual
+# Full-resolution source of public/og-kolam.jpg (15 MB); keep it out of the repo
+/kolam.png
