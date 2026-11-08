@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+#
+# pre-push: when `main` is pushed, test and build that exact commit, publish
+# the static site to the `gh-pages` branch (served by GitHub Pages), push
+# gh-pages, and only then let the push of `main` continue. If tests or the
+# build fail, the push of main is aborted.
+#
+# Skip once with:  SKIP_PAGES_DEPLOY=1 git push
+#
+set -euo pipefail
+
+remote="$1"
+zero="0000000000000000000000000000000000000000"
+deploy_sha=""
+
+# Git passes one line per ref being pushed: <local ref> <local sha> <remote ref> <remote sha>
+while read -r local_ref local_sha remote_ref remote_sha; do
+  if [[ "$remote_ref" == "refs/heads/main" && "$local_sha" != "$zero" ]]; then
+    deploy_sha="$local_sha"
+  fi
+done
+
+[[ -z "$deploy_sha" ]] && exit 0
+if [[ "${SKIP_PAGES_DEPLOY:-}" == "1" ]]; then
+  echo "pre-push: SKIP_PAGES_DEPLOY=1, not deploying gh-pages"
+  exit 0
+fi
+
+exec "$(git rev-parse --show-toplevel)/scripts/deploy-pages.sh" "$remote" "$deploy_sha"
