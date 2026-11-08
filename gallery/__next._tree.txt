@@ -1,0 +1,4 @@
+:HL["/kolam/_next/static/chunks/01tb7yte5uj4l.css","style"]
+2:[["children",{"s":"__PAGE__","h":160}]]
+1:[["children",{"s":"gallery","h":96,"c":"$Q2"}]]
+0:{"b":"mpkwAfzGsJOdKoRFN0c6N","t":{"t":{"s":"","h":80,"c":"$Q1"}}}
