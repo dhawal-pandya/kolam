@@ -28,7 +28,17 @@ if [[ -z "${ALLOW_DIRTY:-}" && -n "$(git status --porcelain)" ]]; then
   die "working tree has uncommitted or untracked changes; commit or stash them so the deployed site matches main (or ALLOW_DIRTY=1)."
 fi
 
-# 2. Don't publish a site for a main that the remote will then reject.
+# 2a. GitHub makes the first branch pushed to an empty repository its
+#     default. Publishing gh-pages first would make it the default, and the
+#     hook cannot push main itself (git's own push of main would then be
+#     rejected), so ask for one plain push of main first.
+if [[ -z "${DRY_RUN:-}" && -z "$(git ls-remote --heads "$remote" 2>/dev/null)" ]]; then
+  die "$remote is an empty repository. Push main once without deploying, so main becomes the default branch:
+    SKIP_PAGES_DEPLOY=1 git push -u $remote main
+  then publish the site with:  npm run deploy:pages   (later pushes deploy automatically)"
+fi
+
+# 2b. Don't publish a site for a main that the remote will then reject.
 if git fetch -q "$remote" main 2>/dev/null; then
   if [[ -z "${ALLOW_DIVERGED:-}" ]] && ! git merge-base --is-ancestor FETCH_HEAD "$sha"; then
     die "$remote/main has commits you don't have; pull first (or ALLOW_DIVERGED=1 for a force push)."

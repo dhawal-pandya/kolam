@@ -108,6 +108,10 @@ published. Pushes of other branches are not affected.
   commit `gh-pages` locally without pushing.
 - **One-time:** in the repository's Settings → Pages, set *Source: Deploy
   from a branch*, branch `gh-pages`, folder `/ (root)`.
+- **First push to an empty repository:** GitHub makes the first branch
+  pushed the default, so the hook refuses to publish `gh-pages` until `main`
+  exists. Run `SKIP_PAGES_DEPLOY=1 git push -u origin main`, then
+  `npm run deploy:pages`. After that, every push deploys automatically.
 
 `npm run build` without the variable builds for the site root, and is also
 deployable to any static host: Netlify, Vercel or S3. Designs are addressed
